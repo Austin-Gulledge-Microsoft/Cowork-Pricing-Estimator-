@@ -1,0 +1,1475 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Cowork Cost Decision Guide</title>
+  <link rel="icon" href="data:," />
+  <script>
+    (() => {
+      const param = new URLSearchParams(window.location.search).get("clawpilotTheme");
+      const theme = param || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+      document.documentElement.setAttribute("data-theme", theme);
+    })();
+  </script>
+  <style>
+    :root {
+      color-scheme: light;
+      --cp-bg: #f7f4ef;
+      --cp-bg-elevated: #fcfbf8;
+      --cp-surface: #ffffff;
+      --cp-surface-soft: #f5f5f5;
+      --cp-border: #dedede;
+      --cp-border-strong: #919191;
+      --cp-text: #242424;
+      --cp-text-muted: #5c5c5c;
+      --cp-text-soft: #6f6f6f;
+      --cp-accent: #0f6cbd;
+      --cp-accent-hover: #0b5a9c;
+      --cp-accent-soft: rgba(15, 108, 189, 0.1);
+      --cp-accent-fg: #ffffff;
+      --cp-success: #16a34a;
+      --cp-warning: #f59e0b;
+      --cp-danger: #dc2626;
+      --cp-shadow: 0 18px 48px rgba(0, 0, 0, 0.12);
+      --cp-overlay: rgba(255, 255, 255, 0.84);
+      --cp-panel: rgba(255, 255, 255, 0.92);
+    }
+
+    html[data-theme="dark"] {
+      color-scheme: dark;
+      --cp-bg: #3a3938;
+      --cp-bg-elevated: #31302f;
+      --cp-surface: #252525;
+      --cp-surface-soft: #2d2d2d;
+      --cp-border: #454545;
+      --cp-border-strong: #666;
+      --cp-text: #e4e4e4;
+      --cp-text-muted: #a0a0a0;
+      --cp-text-soft: #bababa;
+      --cp-accent: #4da6ff;
+      --cp-accent-hover: #69b6ff;
+      --cp-accent-soft: rgba(77, 166, 255, 0.14);
+      --cp-accent-fg: #102235;
+      --cp-success: #4ade80;
+      --cp-warning: #fbbf24;
+      --cp-danger: #f87171;
+      --cp-shadow: 0 18px 48px rgba(0, 0, 0, 0.32);
+      --cp-overlay: rgba(37, 37, 37, 0.9);
+      --cp-panel: rgba(37, 37, 37, 0.78);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Segoe UI", Aptos, Calibri, -apple-system, BlinkMacSystemFont, sans-serif;
+      background:
+        radial-gradient(circle at top left, var(--cp-accent-soft), transparent 28rem),
+        linear-gradient(135deg, var(--cp-bg), var(--cp-bg-elevated));
+      color: var(--cp-text);
+    }
+
+    button, input, select {
+      font: inherit;
+    }
+
+    .shell {
+      width: min(1440px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 28px 0 40px;
+    }
+
+    .hero {
+      border: 1px solid var(--cp-border);
+      border-radius: 20px;
+      background: var(--cp-panel);
+      box-shadow: var(--cp-shadow);
+      padding: 28px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      right: -6%;
+      top: -10%;
+      width: 320px;
+      height: 320px;
+      border-radius: 50%;
+      background: var(--cp-accent-soft);
+      filter: blur(8px);
+    }
+
+    .hero-grid {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: minmax(0, 1.25fr) minmax(300px, 0.75fr);
+      gap: 20px;
+      align-items: stretch;
+    }
+
+    .hero-stack {
+      display: grid;
+      gap: 14px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border: 1px solid var(--cp-border);
+      border-radius: 999px;
+      background: var(--cp-surface);
+      color: var(--cp-text-muted);
+      padding: 6px 12px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .status-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 999px;
+      background: var(--cp-success);
+      box-shadow: 0 0 0 4px var(--cp-accent-soft);
+    }
+
+    h1 {
+      margin: 16px 0 10px;
+      font-size: clamp(34px, 4.8vw, 62px);
+      line-height: 0.95;
+      letter-spacing: -0.05em;
+    }
+
+    .lead {
+      margin: 0;
+      max-width: 780px;
+      color: var(--cp-text-muted);
+      font-size: clamp(16px, 1.8vw, 20px);
+      line-height: 1.45;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 22px;
+    }
+
+    .lead-strip {
+      border: 1px solid var(--cp-border);
+      border-radius: 16px;
+      background: var(--cp-surface);
+      padding: 14px 16px;
+      color: var(--cp-text-muted);
+      line-height: 1.45;
+    }
+
+    .lead-strip strong {
+      color: var(--cp-text);
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      border: 1px solid var(--cp-border);
+      border-radius: 0.75rem;
+      background: var(--cp-surface);
+      color: var(--cp-text);
+      cursor: pointer;
+      padding: 10px 14px;
+      text-decoration: none;
+      font-weight: 650;
+      transition: transform 150ms ease, border-color 150ms ease, background 150ms ease;
+    }
+
+    .button:hover {
+      transform: translateY(-1px);
+      border-color: var(--cp-border-strong);
+    }
+
+    .button.primary {
+      border-color: var(--cp-accent);
+      background: var(--cp-accent);
+      color: var(--cp-accent-fg);
+    }
+
+    .hero-metrics {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .metric {
+      border: 1px solid var(--cp-border);
+      border-radius: 16px;
+      background: var(--cp-surface);
+      padding: 18px;
+    }
+
+    .metric-label {
+      color: var(--cp-text-muted);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .metric-value {
+      margin-top: 8px;
+      font-size: 32px;
+      line-height: 1;
+      font-weight: 800;
+      letter-spacing: -0.04em;
+    }
+
+    .metric-note {
+      margin-top: 8px;
+      color: var(--cp-text-soft);
+      font-size: 13px;
+      line-height: 1.35;
+    }
+
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 5;
+      margin: 18px 0;
+      border: 1px solid var(--cp-border);
+      border-radius: 16px;
+      background: var(--cp-overlay);
+      backdrop-filter: blur(18px);
+      padding: 8px;
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      box-shadow: 0 0 2px var(--cp-border), 0 1px 2px var(--cp-border);
+    }
+
+    .nav a {
+      color: var(--cp-text-muted);
+      text-decoration: none;
+      border-radius: 0.7rem;
+      padding: 9px 12px;
+      white-space: nowrap;
+      font-weight: 650;
+      font-size: 14px;
+    }
+
+    .nav a:hover,
+    .nav a.active {
+      background: var(--cp-accent-soft);
+      color: var(--cp-text);
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 392px;
+      gap: 18px;
+      align-items: start;
+    }
+
+    .main-stack,
+    .side-stack {
+      display: grid;
+      gap: 18px;
+    }
+
+    .card {
+      border: 1px solid var(--cp-border);
+      border-radius: 18px;
+      background: var(--cp-panel);
+      box-shadow: 0 0 2px var(--cp-border), 0 1px 2px var(--cp-border);
+      padding: 22px;
+    }
+
+    .decision-path {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .step-card {
+      border: 1px solid var(--cp-border);
+      border-radius: 16px;
+      background: var(--cp-surface-soft);
+      padding: 16px;
+      min-height: 180px;
+    }
+
+    .step-card.current {
+      background: var(--cp-accent-soft);
+      border-color: var(--cp-accent);
+    }
+
+    .step-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 34px;
+      height: 34px;
+      border-radius: 10px;
+      background: var(--cp-surface);
+      border: 1px solid var(--cp-border);
+      font-weight: 800;
+      color: var(--cp-accent);
+    }
+
+    .step-card h3 {
+      margin: 12px 0 8px;
+      font-size: 16px;
+    }
+
+    .step-card p {
+      margin: 0;
+      color: var(--cp-text-muted);
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    .decision-list {
+      margin: 12px 0 0;
+      padding: 0;
+      list-style: none;
+      display: grid;
+      gap: 8px;
+    }
+
+    .decision-list li {
+      display: flex;
+      gap: 8px;
+      color: var(--cp-text-soft);
+      font-size: 13px;
+      line-height: 1.35;
+    }
+
+    .decision-check {
+      flex: 0 0 auto;
+      width: 18px;
+      height: 18px;
+      border-radius: 999px;
+      border: 1px solid var(--cp-border-strong);
+      display: grid;
+      place-items: center;
+      color: var(--cp-success);
+      font-size: 11px;
+      font-weight: 900;
+    }
+
+    .checkpoint {
+      display: grid;
+      gap: 10px;
+      border: 1px solid var(--cp-border);
+      border-radius: 16px;
+      background: var(--cp-surface-soft);
+      padding: 14px;
+    }
+
+    .checkpoint strong {
+      font-size: 14px;
+    }
+
+    .checkpoint span {
+      color: var(--cp-text-muted);
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    .section-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      align-items: start;
+      margin-bottom: 18px;
+    }
+
+    h2 {
+      margin: 0;
+      font-size: 24px;
+      letter-spacing: -0.035em;
+    }
+
+    .section-subtitle {
+      margin: 6px 0 0;
+      color: var(--cp-text-muted);
+      line-height: 1.45;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      border: 1px solid var(--cp-border);
+      border-radius: 999px;
+      background: var(--cp-surface-soft);
+      color: var(--cp-text-muted);
+      padding: 6px 10px;
+      font-size: 12px;
+      font-weight: 700;
+      white-space: nowrap;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .grid-two {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .controls-grid {
+      display: grid;
+      gap: 12px;
+    }
+
+    .control {
+      border: 1px solid var(--cp-border);
+      border-radius: 16px;
+      background: var(--cp-surface-soft);
+      padding: 14px;
+    }
+
+    .control-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .control label {
+      display: block;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .control .value {
+      color: var(--cp-accent);
+      font-size: 20px;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .control .hint {
+      color: var(--cp-text-muted);
+      font-size: 12px;
+      line-height: 1.35;
+      margin-top: 6px;
+    }
+
+    .range-row,
+    .number-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 96px;
+      gap: 10px;
+      align-items: center;
+    }
+
+    input[type="range"] {
+      width: 100%;
+      accent-color: var(--cp-accent);
+    }
+
+    input[type="number"],
+    select {
+      width: 100%;
+      border: 1px solid var(--cp-border);
+      border-radius: 12px;
+      background: var(--cp-surface);
+      color: var(--cp-text);
+      padding: 10px 12px;
+    }
+
+    .toggle-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .toggle {
+      border: 1px solid var(--cp-border);
+      border-radius: 999px;
+      background: var(--cp-surface);
+      color: var(--cp-text);
+      cursor: pointer;
+      padding: 8px 12px;
+      font-weight: 700;
+    }
+
+    .advanced {
+      display: none;
+      margin-top: 12px;
+      gap: 12px;
+    }
+
+    .advanced.open {
+      display: grid;
+    }
+
+    .kpi-list,
+    .insight-list {
+      display: grid;
+      gap: 10px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .kpi,
+    .insight {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: 12px;
+      align-items: center;
+      border: 1px solid var(--cp-border);
+      border-radius: 0.75rem;
+      background: var(--cp-surface-soft);
+      padding: 12px;
+    }
+
+    .kpi-icon,
+    .insight-icon {
+      width: 34px;
+      height: 34px;
+      border-radius: 0.75rem;
+      display: grid;
+      place-items: center;
+      border: 1px solid var(--cp-border);
+      background: var(--cp-surface);
+      color: var(--cp-accent);
+      font-weight: 800;
+    }
+
+    .kpi strong,
+    .insight strong {
+      display: block;
+      margin-bottom: 2px;
+      font-size: 14px;
+    }
+
+    .kpi span,
+    .insight span {
+      color: var(--cp-text-muted);
+      font-size: 12px;
+      line-height: 1.35;
+    }
+
+    .kpi-target {
+      color: var(--cp-text);
+      font-weight: 800;
+      font-size: 15px;
+      white-space: nowrap;
+    }
+
+    .chart-wrap {
+      display: grid;
+      gap: 14px;
+    }
+
+    .chart {
+      border: 1px solid var(--cp-border);
+      border-radius: 18px;
+      background: var(--cp-surface-soft);
+      padding: 14px;
+      overflow: hidden;
+    }
+
+    .chart-legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 12px;
+      color: var(--cp-text-muted);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .legend-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      white-space: nowrap;
+    }
+
+    .legend-swatch {
+      width: 12px;
+      height: 12px;
+      border-radius: 3px;
+    }
+
+    .bars {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      align-items: end;
+      min-height: 260px;
+    }
+
+    .bar-card {
+      display: grid;
+      gap: 10px;
+      align-content: end;
+      min-height: 240px;
+      padding: 12px;
+      border: 1px solid var(--cp-border);
+      border-radius: 16px;
+      background: var(--cp-surface);
+    }
+
+    .bar-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: start;
+    }
+
+    .bar-head strong {
+      font-size: 15px;
+    }
+
+    .bar-head span {
+      color: var(--cp-text-muted);
+      font-size: 12px;
+    }
+
+    .bar-track {
+      display: flex;
+      align-items: end;
+      min-height: 150px;
+      border-radius: 14px;
+      background:
+        linear-gradient(to top, rgba(127,127,127,.14) 1px, transparent 1px) 0 0 / 100% 25%,
+        var(--cp-surface-soft);
+      padding: 10px;
+    }
+
+    .bar-fill {
+      width: 100%;
+      min-height: 20px;
+      border-radius: 12px;
+      background: linear-gradient(180deg, var(--fill-top), var(--fill-bottom));
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,.12);
+    }
+
+    .bar-meta {
+      display: grid;
+      gap: 4px;
+    }
+
+    .bar-meta .big {
+      font-size: 21px;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+    }
+
+    .bar-meta .small {
+      color: var(--cp-text-muted);
+      font-size: 12px;
+    }
+
+    .journey {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .journey-step {
+      border: 1px solid var(--cp-border);
+      border-radius: 16px;
+      background: var(--cp-surface-soft);
+      padding: 15px;
+      min-height: 156px;
+    }
+
+    .journey-step strong {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 15px;
+    }
+
+    .journey-step span {
+      color: var(--cp-text-muted);
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    .formula {
+      display: grid;
+      gap: 10px;
+    }
+
+    .formula-line {
+      border: 1px solid var(--cp-border);
+      border-radius: 14px;
+      background: var(--cp-surface-soft);
+      padding: 12px;
+      color: var(--cp-text-muted);
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    .formula-line strong {
+      color: var(--cp-text);
+    }
+
+    .footer {
+      margin-top: 18px;
+      color: var(--cp-text-muted);
+      text-align: center;
+      font-size: 13px;
+      line-height: 1.4;
+    }
+
+    .accent {
+      color: var(--cp-accent);
+      font-weight: 800;
+    }
+
+    .bad {
+      color: var(--cp-danger);
+    }
+
+    @media (max-width: 1120px) {
+      .hero-grid,
+      .layout {
+        grid-template-columns: 1fr;
+      }
+
+      .decision-path,
+      .journey,
+      .bars {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 720px) {
+      .shell {
+        width: min(100% - 18px, 1440px);
+        padding-top: 10px;
+      }
+
+      .hero {
+        padding: 20px;
+      }
+
+      .hero-metrics,
+      .grid-two {
+        grid-template-columns: 1fr;
+      }
+
+      .range-row,
+      .number-row {
+        grid-template-columns: 1fr;
+      }
+
+      .section-head {
+        display: grid;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <header class="hero">
+      <div class="hero-grid">
+        <div class="hero-stack">
+          <div class="eyebrow"><span class="status-dot" aria-hidden="true"></span>Updated cost estimation dashboard</div>
+          <h1>Cowork cost estimator</h1>
+          <p class="lead">
+            Work through the cost decision in order: define the seat pool, judge active usage, compare cost paths,
+            then decide what level of spend is justified.
+          </p>
+          <div class="lead-strip">
+            <strong>Best for:</strong> a person who needs to answer “How many seats, how much usage, and what should we budget?”
+          </div>
+          <div class="hero-actions">
+            <a class="button primary" href="#decision-path">Start decision path</a>
+            <a class="button" href="#controls">Set inputs</a>
+            <a class="button" href="#scenarios">Compare options</a>
+          </div>
+        </div>
+        <div class="hero-metrics" aria-label="Cost summary">
+          <div class="metric">
+            <div class="metric-label">Monthly cost</div>
+            <div class="metric-value" id="monthlyCost">$0</div>
+            <div class="metric-note">Directional estimate based on your current inputs.</div>
+          </div>
+          <div class="metric">
+            <div class="metric-label">Annual cost</div>
+            <div class="metric-value" id="annualCost">$0</div>
+            <div class="metric-note">Monthly estimate multiplied by 12.</div>
+          </div>
+          <div class="metric">
+            <div class="metric-label">Monthly active users</div>
+            <div class="metric-value" id="activeUsers">0</div>
+            <div class="metric-note">Licensed users multiplied by active usage.</div>
+          </div>
+          <div class="metric">
+            <div class="metric-label">Total credits</div>
+            <div class="metric-value" id="totalCredits">0</div>
+            <div class="metric-note">After all multipliers and buffer.</div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <nav class="nav" aria-label="Page navigation">
+      <a href="#decision-path" class="active">Decision path</a>
+      <a href="#controls">Inputs</a>
+      <a href="#scenarios">Compare</a>
+      <a href="#insights">Check</a>
+      <a href="#formula">Explain</a>
+    </nav>
+
+    <div class="layout">
+      <main class="main-stack">
+        <section id="decision-path" class="card">
+          <div class="section-head">
+            <div>
+              <h2>Decision progression</h2>
+              <p class="section-subtitle">Use this sequence to move from “what are we buying?” to “what should we budget?”</p>
+            </div>
+            <span class="pill">Step-by-step</span>
+          </div>
+          <div class="decision-path">
+            <article class="step-card current">
+              <div class="step-badge">1</div>
+              <h3>Define the seat pool</h3>
+              <p>Start with licensed users so the model has a clear top line. This anchors the rest of the estimate.</p>
+              <ul class="decision-list">
+                <li><span class="decision-check">✓</span>How many users are licensed?</li>
+                <li><span class="decision-check">✓</span>Is the number fixed or a target?</li>
+              </ul>
+            </article>
+            <article class="step-card">
+              <div class="step-badge">2</div>
+              <h3>Judge active usage</h3>
+              <p>Set the share of licensed users who are actually using Cowork and how often they create sessions.</p>
+              <ul class="decision-list">
+                <li><span class="decision-check">✓</span>What % will be active?</li>
+                <li><span class="decision-check">✓</span>How intense is monthly use?</li>
+              </ul>
+            </article>
+            <article class="step-card">
+              <div class="step-badge">3</div>
+              <h3>Compare cost paths</h3>
+              <p>Adjust model, context, tool, runtime, buffer, and efficiency assumptions to see best, base, and high cases.</p>
+              <ul class="decision-list">
+                <li><span class="decision-check">✓</span>What’s the conservative case?</li>
+                <li><span class="decision-check">✓</span>Where does spend jump?</li>
+              </ul>
+            </article>
+            <article class="step-card">
+              <div class="step-badge">4</div>
+              <h3>Choose the budget</h3>
+              <p>Use the monthly and annual outputs to decide whether the current plan is acceptable or needs adjustment.</p>
+              <ul class="decision-list">
+                <li><span class="decision-check">✓</span>Is the cost in range?</li>
+                <li><span class="decision-check">✓</span>What should we commit?</li>
+              </ul>
+            </article>
+          </div>
+        </section>
+
+        <section id="controls" class="card">
+          <div class="section-head">
+            <div>
+              <h2>Step 2: Set the inputs</h2>
+              <p class="section-subtitle">Fill in the core inputs first, then open the extra controls only if you need a more detailed decision.</p>
+            </div>
+            <span class="pill">Live model</span>
+          </div>
+
+          <div class="controls-grid">
+            <div class="control">
+              <div class="control-top">
+                <label for="licensedUsers">Licensed users</label>
+                <div class="value" id="licensedUsersLabel">1,000</div>
+              </div>
+              <div class="range-row">
+                <input id="licensedUsers" type="range" min="50" max="20000" step="10" value="1000" />
+                <input id="licensedUsersNum" type="number" min="50" max="20000" step="10" value="1000" />
+              </div>
+              <div class="hint">Total seats purchased or assigned.</div>
+            </div>
+
+            <div class="grid-two">
+              <div class="control">
+                <div class="control-top">
+                  <label for="activeUsage">Active usage %</label>
+                  <div class="value" id="activeUsageLabel">55%</div>
+                </div>
+                <div class="range-row">
+                  <input id="activeUsage" type="range" min="1" max="100" step="1" value="55" />
+                  <input id="activeUsageNum" type="number" min="1" max="100" step="1" value="55" />
+                </div>
+                <div class="hint">Share of licensed users that are active in a month.</div>
+              </div>
+
+              <div class="control">
+                <div class="control-top">
+                  <label for="sessionsPerUser">Sessions per active user</label>
+                  <div class="value" id="sessionsPerUserLabel">18</div>
+                </div>
+                <div class="range-row">
+                  <input id="sessionsPerUser" type="range" min="1" max="60" step="1" value="18" />
+                  <input id="sessionsPerUserNum" type="number" min="1" max="60" step="1" value="18" />
+                </div>
+                <div class="hint">How many monthly Cowork sessions each active user creates.</div>
+              </div>
+            </div>
+
+            <div class="grid-two">
+              <div class="control">
+                <div class="control-top">
+                  <label for="creditsPerSession">Credits per session</label>
+                  <div class="value" id="creditsPerSessionLabel">42</div>
+                </div>
+                <div class="range-row">
+                  <input id="creditsPerSession" type="range" min="5" max="250" step="1" value="42" />
+                  <input id="creditsPerSessionNum" type="number" min="5" max="250" step="1" value="42" />
+                </div>
+                <div class="hint">Baseline credit burn before multipliers.</div>
+              </div>
+
+              <div class="control">
+                <div class="control-top">
+                  <label for="creditPrice">Credit price ($)</label>
+                  <div class="value" id="creditPriceLabel">$0.01</div>
+                </div>
+                <div class="range-row">
+                  <input id="creditPrice" type="range" min="0.001" max="0.05" step="0.001" value="0.01" />
+                  <input id="creditPriceNum" type="number" min="0.001" max="0.05" step="0.001" value="0.01" />
+                </div>
+                <div class="hint">Copilot Credit list price used for directional modeling.</div>
+              </div>
+            </div>
+
+            <div class="control">
+              <div class="toggle-row">
+                <div>
+                  <label>Additional controls</label>
+                  <div class="hint">Open these only if you need to compare more detailed decision cases.</div>
+                </div>
+                <button class="toggle" id="toggleAdvanced" type="button">Show more</button>
+              </div>
+
+              <div class="advanced" id="advancedPanel">
+                <div class="grid-two">
+                  <div class="control">
+                    <div class="control-top">
+                      <label for="modelMix">Model mix</label>
+                      <div class="value" id="modelMixLabel">Balanced</div>
+                    </div>
+                    <select id="modelMix">
+                      <option value="0.85">Efficient</option>
+                      <option value="1">Balanced</option>
+                      <option value="1.2">Premium</option>
+                    </select>
+                    <div class="hint">Higher quality models burn more credits per session.</div>
+                  </div>
+
+                  <div class="control">
+                    <div class="control-top">
+                      <label for="contextLoad">Context load</label>
+                      <div class="value" id="contextLoadLabel">1.00x</div>
+                    </div>
+                    <select id="contextLoad">
+                      <option value="0.9">Light</option>
+                      <option value="1">Standard</option>
+                      <option value="1.15">Heavy</option>
+                    </select>
+                    <div class="hint">More sources and longer prompts require more context credits.</div>
+                  </div>
+                </div>
+
+                <div class="grid-two">
+                  <div class="control">
+                    <div class="control-top">
+                      <label for="toolLoad">Tool load</label>
+                      <div class="value" id="toolLoadLabel">1.00x</div>
+                    </div>
+                    <select id="toolLoad">
+                      <option value="0.85">Light</option>
+                      <option value="1">Standard</option>
+                      <option value="1.18">Heavy</option>
+                    </select>
+                    <div class="hint">Email, calendar, file, and system actions add tool overhead.</div>
+                  </div>
+
+                  <div class="control">
+                    <div class="control-top">
+                      <label for="runtimeLoad">Runtime load</label>
+                      <div class="value" id="runtimeLoadLabel">1.00x</div>
+                    </div>
+                    <select id="runtimeLoad">
+                      <option value="0.9">Short</option>
+                      <option value="1">Normal</option>
+                      <option value="1.25">Extended</option>
+                    </select>
+                    <div class="hint">Long-running automation and agent runtime increase spend.</div>
+                  </div>
+                </div>
+
+                <div class="grid-two">
+                  <div class="control">
+                    <div class="control-top">
+                      <label for="bufferPct">Planning buffer %</label>
+                      <div class="value" id="bufferPctLabel">12%</div>
+                    </div>
+                    <div class="range-row">
+                      <input id="bufferPct" type="range" min="0" max="50" step="1" value="12" />
+                      <input id="bufferPctNum" type="number" min="0" max="50" step="1" value="12" />
+                    </div>
+                    <div class="hint">Reserve for peaks, seasonality, and unknowns.</div>
+                  </div>
+
+                  <div class="control">
+                    <div class="control-top">
+                      <label for="efficiencyGain">Efficiency gain %</label>
+                      <div class="value" id="efficiencyGainLabel">0%</div>
+                    </div>
+                    <div class="range-row">
+                      <input id="efficiencyGain" type="range" min="0" max="35" step="1" value="0" />
+                      <input id="efficiencyGainNum" type="number" min="0" max="35" step="1" value="0" />
+                    </div>
+                    <div class="hint">Use this to model prompt reuse, templates, or policy automation.</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="scenarios" class="card">
+          <div class="section-head">
+            <div>
+              <h2>Step 3: Compare scenarios</h2>
+              <p class="section-subtitle">Use the three scenarios to decide whether the current assumptions are conservative enough.</p>
+            </div>
+            <span class="pill">Monthly view</span>
+          </div>
+
+          <div class="chart-wrap">
+            <div class="chart-legend">
+              <span class="legend-item"><span class="legend-swatch" style="background:#5bb5e2"></span>Low</span>
+              <span class="legend-item"><span class="legend-swatch" style="background:#0f6cbd"></span>Base</span>
+              <span class="legend-item"><span class="legend-swatch" style="background:#083463"></span>High</span>
+            </div>
+            <div class="bars" id="bars"></div>
+          </div>
+        </section>
+
+        <section id="journey" class="card">
+          <div class="section-head">
+            <div>
+              <h2>Decision journey</h2>
+              <p class="section-subtitle">This shows how a reviewer can move through the document without jumping around.</p>
+            </div>
+            <span class="pill">Progression</span>
+          </div>
+          <div class="journey">
+            <div class="journey-step"><strong>1. Scope</strong><span>Confirm the number of licensed users and whether the figure is a target or a fixed commitment.</span></div>
+            <div class="journey-step"><strong>2. Usage</strong><span>Estimate what portion of the seats are active and how many sessions each active user creates.</span></div>
+            <div class="journey-step"><strong>3. Stress test</strong><span>Use the advanced controls to see how cost changes under heavier workflows or richer models.</span></div>
+            <div class="journey-step"><strong>4. Decide</strong><span>Compare the budget to the value and decide whether to hold, trim, or expand the plan.</span></div>
+          </div>
+        </section>
+      </main>
+
+      <aside class="side-stack">
+        <section class="card" id="insights">
+          <div class="section-head">
+            <div>
+              <h2>Live insights</h2>
+              <p class="section-subtitle">Quick readouts that help you sanity-check the estimate.</p>
+            </div>
+          </div>
+
+          <ul class="kpi-list">
+            <li class="kpi">
+              <span class="kpi-icon">L</span>
+              <div><strong>Licensed users</strong><span>Total seats in the model.</span></div>
+              <span class="kpi-target" id="kpiLicensed">1,000</span>
+            </li>
+            <li class="kpi">
+              <span class="kpi-icon">A</span>
+              <div><strong>Active users</strong><span>Seats with monthly usage.</span></div>
+              <span class="kpi-target" id="kpiActive">550</span>
+            </li>
+            <li class="kpi">
+              <span class="kpi-icon">C</span>
+              <div><strong>Credits per active user</strong><span>Monthly burn per active user.</span></div>
+              <span class="kpi-target" id="kpiPerActive">$0.00</span>
+            </li>
+            <li class="kpi">
+              <span class="kpi-icon">S</span>
+              <div><strong>Cost per licensed seat</strong><span>Monthly spend divided by all licensed users.</span></div>
+              <span class="kpi-target" id="kpiPerSeat">$0.00</span>
+            </li>
+            <li class="kpi">
+              <span class="kpi-icon">U</span>
+              <div><strong>Usage efficiency</strong><span>Active usage as a share of licensed seats.</span></div>
+              <span class="kpi-target" id="kpiUsage">55%</span>
+            </li>
+          </ul>
+        </section>
+
+        <section class="card" id="formula">
+          <div class="section-head">
+            <div>
+              <h2>Decision checklist</h2>
+              <p class="section-subtitle">Use this as a final pass before you lock the budget.</p>
+            </div>
+          </div>
+          <div class="formula">
+            <div class="formula-line"><strong>1. Seat count</strong> — are the licensed users the right starting point?</div>
+            <div class="formula-line"><strong>2. Active usage</strong> — is the usage rate realistic for the audience?</div>
+            <div class="formula-line"><strong>3. Cost pressure</strong> — do model, context, tool, and runtime settings reflect the real workload?</div>
+            <div class="formula-line"><strong>4. Budget decision</strong> — does the monthly and annual cost support a go / hold / adjust call?</div>
+          </div>
+        </section>
+
+        <section class="card">
+          <div class="section-head">
+            <div>
+              <h2>Recommendation</h2>
+              <p class="section-subtitle">A simple reading of the current model to help the reviewer make the next call.</p>
+            </div>
+          </div>
+          <div class="checkpoint">
+            <strong id="snapshotDecision">Proceed with the current assumptions.</strong>
+            <span>Monthly active users: <span id="snapshotActive">0</span> · Monthly cost: <span id="snapshotCost">$0</span> · Annual cost: <span id="snapshotAnnual">$0</span></span>
+          </div>
+          <ul class="insight-list" style="margin-top:12px;">
+            <li class="insight"><span class="insight-icon">M</span><div><strong>Monthly active users</strong><span>Used for sizing and engagement planning.</span></div><span class="kpi-target" id="snapshotActive2">0</span></li>
+            <li class="insight"><span class="insight-icon">C</span><div><strong>Monthly cost</strong><span>Spend after all multipliers and buffer.</span></div><span class="kpi-target" id="snapshotCost2">$0</span></li>
+            <li class="insight"><span class="insight-icon">A</span><div><strong>Annual cost</strong><span>Directional annualized run rate.</span></div><span class="kpi-target" id="snapshotAnnual2">$0</span></li>
+          </ul>
+        </section>
+      </aside>
+    </div>
+
+    <p class="footer">
+      This updated estimator adds licensed users and active usage as first-class controls, so you can vary the seat pool and engagement rate before sharing assumptions with stakeholders.
+    </p>
+  </div>
+
+  <script>
+    const fmtCurrency = new Intl.NumberFormat("en-US", {
+      style: "currency",
+      currency: "USD",
+      maximumFractionDigits: 0
+    });
+    const fmtNumber = new Intl.NumberFormat("en-US");
+    const fmtDecimal = new Intl.NumberFormat("en-US", {
+      style: "currency",
+      currency: "USD",
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
+    });
+
+    const state = {
+      licensedUsers: 1000,
+      activeUsage: 55,
+      sessionsPerUser: 18,
+      creditsPerSession: 42,
+      creditPrice: 0.01,
+      modelMix: 1,
+      contextLoad: 1,
+      toolLoad: 1,
+      runtimeLoad: 1,
+      bufferPct: 12,
+      efficiencyGain: 0
+    };
+
+    const els = {
+      licensedUsers: document.getElementById("licensedUsers"),
+      licensedUsersNum: document.getElementById("licensedUsersNum"),
+      activeUsage: document.getElementById("activeUsage"),
+      activeUsageNum: document.getElementById("activeUsageNum"),
+      sessionsPerUser: document.getElementById("sessionsPerUser"),
+      sessionsPerUserNum: document.getElementById("sessionsPerUserNum"),
+      creditsPerSession: document.getElementById("creditsPerSession"),
+      creditsPerSessionNum: document.getElementById("creditsPerSessionNum"),
+      creditPrice: document.getElementById("creditPrice"),
+      creditPriceNum: document.getElementById("creditPriceNum"),
+      modelMix: document.getElementById("modelMix"),
+      contextLoad: document.getElementById("contextLoad"),
+      toolLoad: document.getElementById("toolLoad"),
+      runtimeLoad: document.getElementById("runtimeLoad"),
+      bufferPct: document.getElementById("bufferPct"),
+      bufferPctNum: document.getElementById("bufferPctNum"),
+      efficiencyGain: document.getElementById("efficiencyGain"),
+      efficiencyGainNum: document.getElementById("efficiencyGainNum"),
+      toggleAdvanced: document.getElementById("toggleAdvanced"),
+      advancedPanel: document.getElementById("advancedPanel")
+    };
+
+    const output = {
+      monthlyCost: document.getElementById("monthlyCost"),
+      annualCost: document.getElementById("annualCost"),
+      activeUsers: document.getElementById("activeUsers"),
+      totalCredits: document.getElementById("totalCredits"),
+      licensedUsersLabel: document.getElementById("licensedUsersLabel"),
+      activeUsageLabel: document.getElementById("activeUsageLabel"),
+      sessionsPerUserLabel: document.getElementById("sessionsPerUserLabel"),
+      creditsPerSessionLabel: document.getElementById("creditsPerSessionLabel"),
+      creditPriceLabel: document.getElementById("creditPriceLabel"),
+      modelMixLabel: document.getElementById("modelMixLabel"),
+      contextLoadLabel: document.getElementById("contextLoadLabel"),
+      toolLoadLabel: document.getElementById("toolLoadLabel"),
+      runtimeLoadLabel: document.getElementById("runtimeLoadLabel"),
+      bufferPctLabel: document.getElementById("bufferPctLabel"),
+      efficiencyGainLabel: document.getElementById("efficiencyGainLabel"),
+      kpiLicensed: document.getElementById("kpiLicensed"),
+      kpiActive: document.getElementById("kpiActive"),
+      kpiPerActive: document.getElementById("kpiPerActive"),
+      kpiPerSeat: document.getElementById("kpiPerSeat"),
+      kpiUsage: document.getElementById("kpiUsage"),
+      snapshotActive: document.getElementById("snapshotActive"),
+      snapshotActive2: document.getElementById("snapshotActive2"),
+      snapshotCost: document.getElementById("snapshotCost"),
+      snapshotCost2: document.getElementById("snapshotCost2"),
+      snapshotAnnual: document.getElementById("snapshotAnnual"),
+      snapshotAnnual2: document.getElementById("snapshotAnnual2"),
+      snapshotDecision: document.getElementById("snapshotDecision"),
+      bars: document.getElementById("bars")
+    };
+
+    function clamp(v, min, max) {
+      return Math.min(max, Math.max(min, v));
+    }
+
+    function syncPair(rangeEl, numberEl, key, decimals = 0) {
+      const value = decimals ? Number.parseFloat(rangeEl.value) : Number.parseInt(rangeEl.value, 10);
+      state[key] = value;
+      numberEl.value = decimals ? value.toFixed(decimals) : String(value);
+      rangeEl.value = String(value);
+    }
+
+    function bindPair(rangeEl, numberEl, key, decimals = 0) {
+      const update = (value) => {
+        const parsed = decimals ? Number.parseFloat(value) : Number.parseInt(value, 10);
+        if (Number.isNaN(parsed)) {
+          return;
+        }
+        state[key] = decimals ? parsed : Math.round(parsed);
+        rangeEl.value = String(state[key]);
+        numberEl.value = decimals ? state[key].toFixed(decimals) : String(state[key]);
+        render();
+      };
+
+      rangeEl.addEventListener("input", () => update(rangeEl.value));
+      numberEl.addEventListener("input", () => update(numberEl.value));
+    }
+
+    function modelLabel(value) {
+      if (value === "0.85") return "Efficient";
+      if (value === "1.2") return "Premium";
+      return "Balanced";
+    }
+
+    function loadLabel(value) {
+      if (value === "0.85") return "0.85x";
+      if (value === "0.9") return "0.90x";
+      if (value === "1") return "1.00x";
+      if (value === "1.15") return "1.15x";
+      if (value === "1.18") return "1.18x";
+      if (value === "1.25") return "1.25x";
+      return "1.00x";
+    }
+
+    function computeScenario(multiplier) {
+      const licensed = state.licensedUsers;
+      const activePct = state.activeUsage / 100 * multiplier.active;
+      const activeUsers = licensed * activePct;
+      const sessions = activeUsers * state.sessionsPerUser * multiplier.sessions;
+      const creditsPerSession = state.creditsPerSession * state.modelMix * state.contextLoad * state.toolLoad * state.runtimeLoad * multiplier.credit;
+      const rawCredits = sessions * creditsPerSession;
+      const bufferedCredits = rawCredits * (1 + state.bufferPct / 100);
+      const efficiency = 1 - (state.efficiencyGain / 100);
+      const adjustedCredits = bufferedCredits * efficiency;
+      const monthlyCost = adjustedCredits * state.creditPrice;
+
+      return {
+        activeUsers,
+        sessions,
+        rawCredits,
+        adjustedCredits,
+        monthlyCost
+      };
+    }
+
+    function renderBars() {
+      const scenarios = [
+        {
+          name: "Low",
+          note: "lighter adoption",
+          colorTop: "#5bb5e2",
+          colorBottom: "#0f6cbd",
+          mult: { active: 0.75, sessions: 0.8, credit: 0.9 }
+        },
+        {
+          name: "Base",
+          note: "current settings",
+          colorTop: "#4da6ff",
+          colorBottom: "#083463",
+          mult: { active: 1, sessions: 1, credit: 1 }
+        },
+        {
+          name: "High",
+          note: "heavier usage",
+          colorTop: "#0f6cbd",
+          colorBottom: "#062443",
+          mult: { active: 1.15, sessions: 1.25, credit: 1.1 }
+        }
+      ];
+
+      const results = scenarios.map((scenario) => ({ ...scenario, data: computeScenario(scenario.mult) }));
+      const max = Math.max(...results.map((item) => item.data.monthlyCost), 1);
+
+      output.bars.innerHTML = results.map((item) => {
+        const height = Math.max(20, (item.data.monthlyCost / max) * 100);
+        return `
+          <article class="bar-card">
+            <div class="bar-head">
+              <div>
+                <strong>${item.name}</strong><br>
+                <span>${item.note}</span>
+              </div>
+              <div class="pill">${fmtCurrency.format(item.data.monthlyCost)}</div>
+            </div>
+            <div class="bar-track">
+              <div class="bar-fill" style="height:${height}%; --fill-top:${item.colorTop}; --fill-bottom:${item.colorBottom};"></div>
+            </div>
+            <div class="bar-meta">
+              <div class="big">${fmtNumber.format(Math.round(item.data.activeUsers))} active</div>
+              <div class="small">${fmtNumber.format(Math.round(item.data.adjustedCredits))} credits / month</div>
+            </div>
+          </article>
+        `;
+      }).join("");
+    }
+
+    function render() {
+      state.licensedUsers = clamp(Number(els.licensedUsers.value), 50, 20000);
+      state.activeUsage = clamp(Number(els.activeUsage.value), 1, 100);
+      state.sessionsPerUser = clamp(Number(els.sessionsPerUser.value), 1, 60);
+      state.creditsPerSession = clamp(Number(els.creditsPerSession.value), 5, 250);
+      state.creditPrice = clamp(Number(els.creditPrice.value), 0.001, 0.05);
+      state.modelMix = Number(els.modelMix.value);
+      state.contextLoad = Number(els.contextLoad.value);
+      state.toolLoad = Number(els.toolLoad.value);
+      state.runtimeLoad = Number(els.runtimeLoad.value);
+      state.bufferPct = clamp(Number(els.bufferPct.value), 0, 50);
+      state.efficiencyGain = clamp(Number(els.efficiencyGain.value), 0, 35);
+
+      els.licensedUsersNum.value = String(state.licensedUsers);
+      els.activeUsageNum.value = String(state.activeUsage);
+      els.sessionsPerUserNum.value = String(state.sessionsPerUser);
+      els.creditsPerSessionNum.value = String(state.creditsPerSession);
+      els.creditPriceNum.value = state.creditPrice.toFixed(3);
+      els.bufferPctNum.value = String(state.bufferPct);
+      els.efficiencyGainNum.value = String(state.efficiencyGain);
+
+      output.licensedUsersLabel.textContent = fmtNumber.format(state.licensedUsers);
+      output.activeUsageLabel.textContent = `${state.activeUsage}%`;
+      output.sessionsPerUserLabel.textContent = fmtNumber.format(state.sessionsPerUser);
+      output.creditsPerSessionLabel.textContent = fmtNumber.format(state.creditsPerSession);
+      output.creditPriceLabel.textContent = fmtDecimal.format(state.creditPrice);
+      output.modelMixLabel.textContent = modelLabel(els.modelMix.value);
+      output.contextLoadLabel.textContent = loadLabel(els.contextLoad.value);
+      output.toolLoadLabel.textContent = loadLabel(els.toolLoad.value);
+      output.runtimeLoadLabel.textContent = loadLabel(els.runtimeLoad.value);
+      output.bufferPctLabel.textContent = `${state.bufferPct}%`;
+      output.efficiencyGainLabel.textContent = `${state.efficiencyGain}%`;
+
+      const base = computeScenario({ active: 1, sessions: 1, credit: 1 });
+      const monthlyCost = base.monthlyCost;
+      const annualCost = monthlyCost * 12;
+
+      output.monthlyCost.textContent = fmtCurrency.format(monthlyCost);
+      output.annualCost.textContent = fmtCurrency.format(annualCost);
+      output.activeUsers.textContent = fmtNumber.format(Math.round(base.activeUsers));
+      output.totalCredits.textContent = fmtNumber.format(Math.round(base.adjustedCredits));
+
+      output.kpiLicensed.textContent = fmtNumber.format(state.licensedUsers);
+      output.kpiActive.textContent = fmtNumber.format(Math.round(base.activeUsers));
+      output.kpiPerActive.textContent = fmtDecimal.format(base.monthlyCost / Math.max(base.activeUsers, 1));
+      output.kpiPerSeat.textContent = fmtDecimal.format(monthlyCost / Math.max(state.licensedUsers, 1));
+      output.kpiUsage.textContent = `${state.activeUsage}%`;
+
+      output.snapshotActive.textContent = fmtNumber.format(Math.round(base.activeUsers));
+      output.snapshotActive2.textContent = fmtNumber.format(Math.round(base.activeUsers));
+      output.snapshotCost.textContent = fmtCurrency.format(monthlyCost);
+      output.snapshotCost2.textContent = fmtCurrency.format(monthlyCost);
+      output.snapshotAnnual.textContent = fmtCurrency.format(annualCost);
+      output.snapshotAnnual2.textContent = fmtCurrency.format(annualCost);
+
+      if (monthlyCost > 12000) {
+        output.snapshotDecision.textContent = "Trim scope or phase the rollout before approving this budget.";
+      } else if (monthlyCost > 5000) {
+        output.snapshotDecision.textContent = "Review assumptions and confirm this spend is acceptable.";
+      } else {
+        output.snapshotDecision.textContent = "Proceed with the current assumptions.";
+      }
+
+      renderBars();
+    }
+
+    function bind() {
+      bindPair(els.licensedUsers, els.licensedUsersNum, "licensedUsers");
+      bindPair(els.activeUsage, els.activeUsageNum, "activeUsage");
+      bindPair(els.sessionsPerUser, els.sessionsPerUserNum, "sessionsPerUser");
+      bindPair(els.creditsPerSession, els.creditsPerSessionNum, "creditsPerSession");
+      bindPair(els.creditPrice, els.creditPriceNum, "creditPrice", 3);
+      bindPair(els.bufferPct, els.bufferPctNum, "bufferPct");
+      bindPair(els.efficiencyGain, els.efficiencyGainNum, "efficiencyGain");
+
+      [
+        els.modelMix,
+        els.contextLoad,
+        els.toolLoad,
+        els.runtimeLoad
+      ].forEach((el) => {
+        el.addEventListener("change", render);
+      });
+
+      els.toggleAdvanced.addEventListener("click", () => {
+        const open = els.advancedPanel.classList.toggle("open");
+        els.toggleAdvanced.textContent = open ? "Hide controls" : "Show more";
+      });
+
+      const navLinks = document.querySelectorAll(".nav a");
+      const sections = [...navLinks].map((link) => document.querySelector(link.getAttribute("href"))).filter(Boolean);
+
+      const syncNav = () => {
+        let current = sections[0];
+        for (let i = sections.length - 1; i >= 0; i -= 1) {
+          if (sections[i].getBoundingClientRect().top <= 120) {
+            current = sections[i];
+            break;
+          }
+        }
+        navLinks.forEach((link) => link.classList.toggle("active", link.getAttribute("href") === `#${current.id}`));
+      };
+
+      document.addEventListener("scroll", syncNav, { passive: true });
+      syncNav();
+    }
+
+    bind();
+    render();
+  </script>
+</body>
+</html>
